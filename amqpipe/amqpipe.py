@@ -10,7 +10,7 @@ from twisted.internet import defer, reactor, protocol
 import twisted.internet.error
 import twisted.internet.protocol
 
-from amqpipe.utils import AMQPConnection, asleep
+from .utils import AMQPConnection, asleep
 
 
 logger = logging.getLogger(__name__)
