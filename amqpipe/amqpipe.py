@@ -196,7 +196,6 @@ class AMQPipe(object):
         except Exception as e:
             logger.warning('Sending NACK due to error %s: %s', type(e).__name__, str(e))
             channel.basic_nack(delivery_tag)
-        print time()
 
     @defer.inlineCallbacks
     def main(self):
