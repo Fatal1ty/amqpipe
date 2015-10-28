@@ -4,6 +4,7 @@ import argparse
 import logging
 from time import time
 from os import environ as env
+from collections import Iterable
 
 import pika
 from twisted.internet import defer, reactor, protocol
@@ -190,7 +191,10 @@ class AMQPipe(object):
 
         try:
             result = yield self.action(message)
-            if result:
+            if isinstance(result, Iterable):
+                for r in result:
+                    yield self.publish(r)
+            elif result:
                 yield self.publish(result)
             channel.basic_ack(delivery_tag)
         except Exception as e:
