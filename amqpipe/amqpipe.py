@@ -192,8 +192,7 @@ class AMQPipe(object):
         try:
             result = yield self.action(message)
             if isinstance(result, Iterable):
-                for r in result:
-                    yield self.publish(r)
+                yield defer.DeferredList([self.publish(r) for r in result])
             elif result:
                 yield self.publish(result)
             channel.basic_ack(delivery_tag)
