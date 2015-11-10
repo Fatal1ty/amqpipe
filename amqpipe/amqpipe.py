@@ -26,11 +26,13 @@ def default_action(message):
 
 
 class AMQPipe(object):
-    def __init__(self, converter=default_converter, action=default_action, init=None):
+    def __init__(self, converter=default_converter, action=default_action, init=None, need_publish=True):
         self.parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter)
         self.args = None
-        self.wait_publisher = defer.Deferred()
-        self.out_channel = None
+        self.need_publish = need_publish
+        if need_publish:
+            self.wait_publisher = defer.Deferred()
+            self.out_channel = None
         self.converter = converter
         self.action = action
         self.init = init
@@ -191,10 +193,11 @@ class AMQPipe(object):
 
         try:
             result = yield self.action(message)
-            if isinstance(result, Iterable):
-                yield defer.DeferredList([self.publish(r) for r in result])
-            elif result:
-                yield self.publish(result)
+            if self.need_publish:
+                if isinstance(result, Iterable):
+                    yield defer.DeferredList([self.publish(r) for r in result])
+                elif result:
+                    yield self.publish(result)
             channel.basic_ack(delivery_tag)
         except Exception as e:
             logger.warning('Sending NACK due to error %s: %s', type(e).__name__, str(e))
@@ -203,7 +206,8 @@ class AMQPipe(object):
     @defer.inlineCallbacks
     def main(self):
         reactor.callLater(0, self.start_consume)
-        reactor.callLater(0, self.start_publish)
+        if self.need_publish:
+            reactor.callLater(0, self.start_publish)
         if self.init:
             yield self.init(self.args)
 
@@ -224,18 +228,19 @@ class AMQPipe(object):
         rq_in_args.add_argument("--rq-in-routing-key", required=True, help="routing key for input RabbitMQ exchange")
         rq_in_args.add_argument("--rq-in-queue", required=True, help="name of input RabbitMQ queue to consume")
 
-        rq_out_args = self.parser.add_argument_group(
-            "Output RabbitMQ",
-            "Connection parameters for output RabbitMQ to publish messages"
-        )
-        rq_out_args.add_argument("--rq-out-host", default="127.0.0.1", help="hostname of output RabbitMQ server")
-        rq_out_args.add_argument("--rq-out-port", default=5672, help="port of output RabbitMQ server")
-        rq_out_args.add_argument("--rq-out-user", default="guest", help="username for output RabbitMQ server")
-        rq_out_args.add_argument("--rq-out-password", default="guest", help="password for output RabbitMQ server")
-        rq_out_args.add_argument("--rq-out-vhost", default="/", help="virtual host of output RabbitMQ server")
-        rq_out_args.add_argument("--rq-out-exchange", required=True, help="exchange for output RabbitMQ server")
-        rq_out_args.add_argument("--rq-out-routing-key-tpl", required=True,
-                                 help="routing key template for output RabbitMQ exchange")
+        if self.need_publish:
+            rq_out_args = self.parser.add_argument_group(
+                "Output RabbitMQ",
+                "Connection parameters for output RabbitMQ to publish messages"
+            )
+            rq_out_args.add_argument("--rq-out-host", default="127.0.0.1", help="hostname of output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-port", default=5672, help="port of output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-user", default="guest", help="username for output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-password", default="guest", help="password for output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-vhost", default="/", help="virtual host of output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-exchange", required=True, help="exchange for output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-routing-key-tpl", required=True,
+                                     help="routing key template for output RabbitMQ exchange")
 
         self.parser.add_argument("--log-file", help="name of log file (if missed - write logs to stderr)")
         self.parser.add_argument("--log-level", default='INFO',
