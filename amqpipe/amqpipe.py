@@ -220,7 +220,7 @@ class AMQPipe(object):
         )
         rq_in_args.add_argument("--rq-in-qos", default=0, type=int, help="prefetch_count for input RabbitMQ server")
         rq_in_args.add_argument("--rq-in-host", default="127.0.0.1", help="hostname of input RabbitMQ server")
-        rq_in_args.add_argument("--rq-in-port", default=5672, help="port of input RabbitMQ server")
+        rq_in_args.add_argument("--rq-in-port", default=5672, type=int, help="port of input RabbitMQ server")
         rq_in_args.add_argument("--rq-in-user", default="guest", help="username for input RabbitMQ server")
         rq_in_args.add_argument("--rq-in-password", default="guest", help="password for input RabbitMQ server")
         rq_in_args.add_argument("--rq-in-vhost", default="/", help="virtual host of input RabbitMQ server")
@@ -234,7 +234,7 @@ class AMQPipe(object):
                 "Connection parameters for output RabbitMQ to publish messages"
             )
             rq_out_args.add_argument("--rq-out-host", default="127.0.0.1", help="hostname of output RabbitMQ server")
-            rq_out_args.add_argument("--rq-out-port", default=5672, help="port of output RabbitMQ server")
+            rq_out_args.add_argument("--rq-out-port", default=5672, type=int, help="port of output RabbitMQ server")
             rq_out_args.add_argument("--rq-out-user", default="guest", help="username for output RabbitMQ server")
             rq_out_args.add_argument("--rq-out-password", default="guest", help="password for output RabbitMQ server")
             rq_out_args.add_argument("--rq-out-vhost", default="/", help="virtual host of output RabbitMQ server")
