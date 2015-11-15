@@ -103,8 +103,8 @@ class AMQPipe(object):
                         0, self.on_message,
                         body, properties, channel, method.delivery_tag
                     )
-                except twisted.internet.error.ConnectionLost as e:
-                    logger.warning(str(e))
+                except Exception as e:
+                    logger.error(str(e))
                     channel.close()
                     break
             yield asleep(5)
