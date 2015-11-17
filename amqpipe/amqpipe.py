@@ -200,7 +200,7 @@ class AMQPipe(object):
                     yield self.publish(result)
             channel.basic_ack(delivery_tag)
         except Exception as e:
-            logger.warning('Sending NACK due to error %s: %s', type(e).__name__, str(e))
+            logger.warning('Sending NACK due to %s: %s', type(e).__name__, str(e))
             channel.basic_nack(delivery_tag)
 
     @defer.inlineCallbacks
