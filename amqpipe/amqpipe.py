@@ -2,14 +2,11 @@
 
 import argparse
 import logging
-from time import time
 from os import environ as env
 from collections import Iterable
 
 import pika
 from twisted.internet import defer, reactor, protocol
-import twisted.internet.error
-import twisted.internet.protocol
 
 from .utils import AMQPConnection, asleep
 
