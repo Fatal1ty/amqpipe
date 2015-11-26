@@ -101,7 +101,7 @@ class AMQPipe(object):
                         body, properties, channel, method.delivery_tag
                     )
                 except Exception as e:
-                    logger.error(str(e))
+                    logger.error("Disconnect occurred in message consumer (%s)", e)
                     channel.close()
                     break
             yield asleep(5)
@@ -149,7 +149,7 @@ class AMQPipe(object):
             logger.info("Ready to publish messages!")
 
             reason = yield disconnect
-            logger.warning(reason)
+            logger.error("Disconnect occurred in message publisher (%s)", reason.getErrorMessage())
             yield asleep(5)
             self.wait_publisher = defer.Deferred()
 
