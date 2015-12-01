@@ -149,7 +149,7 @@ class AMQPipe(object):
             logger.info("Ready to publish messages!")
 
             reason = yield disconnect
-            logger.error("Disconnect occurred in message publisher (%s)", reason.getErrorMessage())
+            logger.error("Disconnect occurred in message publisher (%s)", reason)
             yield asleep(5)
             self.wait_publisher = defer.Deferred()
 
