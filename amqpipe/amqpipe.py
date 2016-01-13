@@ -202,11 +202,14 @@ class AMQPipe(object):
 
     @defer.inlineCallbacks
     def main(self):
+        if self.init:
+            logger.info('Initialization...')
+            yield self.init(self.args)
+        logger.info('Connecting to RabbitMQ server to consume...')
         reactor.callLater(0, self.start_consume)
         if self.need_publish:
+            logger.info('Connecting to RabbitMQ server to publish...')
             reactor.callLater(0, self.start_publish)
-        if self.init:
-            yield self.init(self.args)
 
     def _parse_args(self):
         self.parser.add_argument("--content-type", help="Expected content-type")
