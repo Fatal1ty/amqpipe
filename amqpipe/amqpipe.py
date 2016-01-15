@@ -264,7 +264,7 @@ class AMQPipe(object):
             root_logger.setLevel(log_level)
         else:
             logging.basicConfig(
-                format='%(asctime)s.%(msecs).3d %(levelname)8s %(module)6s:%(lineno)03d %(message)s',
+                format='[%(asctime)s] %(levelname)8s %(module)6s:%(lineno)03d %(message)s',
                 level=log_level
             )
             if 'xterm' in env.get('TERM', ''):
