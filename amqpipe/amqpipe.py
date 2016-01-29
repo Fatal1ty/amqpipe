@@ -178,14 +178,14 @@ class AMQPipe(object):
     def on_message(self, body, properties, channel, delivery_tag):
         if self.args.content_type and properties.content_type != self.args.content_type:
             logger.info("Bad content_type (%s), ignoring message.", properties.content_type)
-            yield channel.basic_ack(delivery_tag)
+            channel.basic_ack(delivery_tag)
             return
 
         try:
             message = self.converter(body)
         except:
             logger.warning("Got bad packet!")
-            yield channel.basic_nack(delivery_tag)
+            channel.basic_nack(delivery_tag)
             return
 
         try:
