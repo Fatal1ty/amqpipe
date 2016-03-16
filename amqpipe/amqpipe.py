@@ -250,7 +250,7 @@ class AMQPipe(object):
                                      help="routing key template of messages sent to output RabbitMQ exchange")
             rq_out_args.add_argument("--rq-out-content-type-tpl", default="text/plain",
                                      help="content type template of messages sent to output RabbitMQ exchange")
-            rq_out_args.add_argument("--rq-out-protobuf-adapter", action='store_true',
+            rq_out_args.add_argument("--rq-out-protobuf-adapter", action='store_true', default=True,
                                      help="adapter for send protobuf messages to output RabbitMQ exchange")
 
         self.parser.add_argument("--log-file", help="name of log file (if missed - write logs to stderr)")
