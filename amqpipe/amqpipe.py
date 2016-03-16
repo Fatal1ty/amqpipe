@@ -154,19 +154,22 @@ class AMQPipe(object):
             self.wait_publisher = defer.Deferred()
 
     @defer.inlineCallbacks
-    def publish(self, result_pb):
+    def publish(self, msg):
         yield self.wait_publisher
 
-        serialized = result_pb.SerializeToString()
-
-        cls = result_pb.DESCRIPTOR.full_name
-        content_type = 'application/protobuf; class="%s"' % cls
         exchange = self.args.rq_out_exchange
-        routing_key = self.args.rq_out_routing_key_tpl.format(result_pb)
+        routing_key = self.args.rq_out_routing_key_tpl.format(msg)
+        if self.args.rq_out_protobuf_adapter:
+            content_type = 'application/protobuf; class="%s"' % msg.DESCRIPTOR.full_name
+            serialized = msg.SerializeToString()
+        else:
+            content_type = self.args.rq_out_content_type_tpl.format(msg)
+            serialized = str(msg)
 
+        msg_type = msg.DESCRIPTOR.full_name if self.args.rq_out_protobuf_adapter else type(msg)
         logger.debug(
             "Sending %s (exchange=%s, routing_key=%s)",
-            cls, exchange, routing_key
+            msg_type, exchange, routing_key
         )
         result = yield self.out_channel.basic_publish(
             exchange, routing_key, serialized,
@@ -244,7 +247,11 @@ class AMQPipe(object):
             rq_out_args.add_argument("--rq-out-exchange-type", default='topic',
                                      help="exchange type for output RabbitMQ server")
             rq_out_args.add_argument("--rq-out-routing-key-tpl", required=True,
-                                     help="routing key template for output RabbitMQ exchange")
+                                     help="routing key template of messages sent to output RabbitMQ exchange")
+            rq_out_args.add_argument("--rq-out-content-type-tpl", default="text/plain",
+                                     help="content type template of messages sent to output RabbitMQ exchange")
+            rq_out_args.add_argument("--rq-out-protobuf-adapter", action='store_true',
+                                     help="adapter for send protobuf messages to output RabbitMQ exchange")
 
         self.parser.add_argument("--log-file", help="name of log file (if missed - write logs to stderr)")
         self.parser.add_argument("--log-level", default='INFO',
