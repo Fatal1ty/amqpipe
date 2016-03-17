@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='amqpipe',
-    version='0.2.2',
+    version='0.2.3',
     description='Twisted based pipeline framework for AMQP',
     platforms="all",
     classifiers=[

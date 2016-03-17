@@ -196,7 +196,11 @@ class AMQPipe(object):
             result = yield self.action(message)
             if self.need_publish:
                 if isinstance(result, Iterable):
-                    yield defer.DeferredList([self.publish(r) for r in result])
+                    try:
+                        yield defer.DeferredList([self.publish(r) for r in result],
+                                                 fireOnOneErrback=True, consumeErrors=True)
+                    except defer.FirstError as e:
+                        e.subFailure.raiseException()
                 elif result:
                     yield self.publish(result)
             channel.basic_ack(delivery_tag)
@@ -250,8 +254,7 @@ class AMQPipe(object):
             rq_out_args.add_argument("--rq-out-routing-key-tpl", required=True,
                                      help="routing key template of messages sent to output RabbitMQ exchange")
             rq_out_args.add_argument("--rq-out-content-type-tpl", default="text/plain",
-                                     help="content type template of messages (not protobuf) sent "
-                                          "to output RabbitMQ exchange")
+                                     help="content type template of messages not in protobuf sent to output RabbitMQ exchange")
 
         self.parser.add_argument("--log-file", help="name of log file (if missed - write logs to stderr)")
         self.parser.add_argument("--log-level", default='INFO',
