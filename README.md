@@ -1,6 +1,6 @@
 AMQPipe
 ==========
-[![PyPI](https://img.shields.io/pypi/dm/amqpipe.svg)]()
+[![PyPI](https://img.shields.io/pypi/dm/amqpipe.svg)](https://pypi.python.org/pypi/amqpipe)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Fatal1ty/amqpipe/master/LICENSE)
 
 Twisted based pipeline framework for AMQP. It allow you to create fast asynchronous services which follow ideology:
