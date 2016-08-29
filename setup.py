@@ -6,6 +6,7 @@ setup(
     name='amqpipe',
     version='0.2.4',
     description='Twisted based pipeline framework for AMQP',
+    long_description=open('README.rst').read(),
     platforms='all',
     classifiers=[
           'Development Status :: 5 - Production/Stable',
