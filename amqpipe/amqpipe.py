@@ -6,7 +6,7 @@ from os import environ as env
 from collections import Iterable
 
 import pika
-from twisted.internet import defer, reactor, protocol
+from twisted.internet import defer, reactor, protocol, task
 
 from .utils import AMQPConnection, asleep
 
@@ -313,5 +313,11 @@ class AMQPipe(object):
     def run(self):
         self.args = self._parse_args()
         self._setup_logger()
-        self.main()
+        d = task.deferLater(reactor, 0, self.main)
+
+        def on_error(e):
+            logger.error(e.getErrorMessage())
+            reactor.stop()
+
+        d.addErrback(on_error)
         reactor.run()
