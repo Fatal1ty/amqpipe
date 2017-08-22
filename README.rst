@@ -4,6 +4,10 @@ AMQPipe
 .. image:: https://travis-ci.org/Fatal1ty/amqpipe.svg?branch=master
     :target: https://travis-ci.org/Fatal1ty/amqpipe
 
+.. image:: https://requires.io/github/Fatal1ty/amqpipe/requirements.svg?branch=master
+    :target: https://requires.io/github/Fatal1ty/amqpipe/requirements/?branch=master
+    :alt: Requirements Status
+
 .. image:: https://img.shields.io/pypi/v/amqpipe.svg
     :target: https://pypi.python.org/pypi/amqpipe
 
