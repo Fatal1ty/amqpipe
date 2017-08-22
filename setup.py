@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='amqpipe',
-    version='0.2.7',
+    version='1.0',
     description='Twisted based pipeline framework for AMQP',
     long_description=open('README.rst').read(),
     platforms='all',
@@ -30,8 +30,8 @@ setup(
     url='https://github.com/Fatal1ty/amqpipe',
     packages=['amqpipe'],
     install_requires=[
-        'twisted',
-        'pika',
-        'colorlog'
+        'twisted==17.5.0',
+        'pika==0.10.0',
+        'colorlog==3.0.1'
     ]
 )
