@@ -1,9 +1,9 @@
 AMQPipe
 ==========
-[![PyPI](https://img.shields.io/pypi/dm/amqpipe.svg?maxAge=2592000)](https://pypi.python.org/pypi/amqpipe)
-[![PyPI](https://img.shields.io/pypi/v/amqpipe.svg?maxAge=2592000)](https://pypi.python.org/pypi/amqpipe)
-[![PyPI](https://img.shields.io/pypi/pyversions/amqpipe.svg?maxAge=2592000)](https://pypi.python.org/pypi/amqpipe)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?maxAge=2592000)](https://raw.githubusercontent.com/Fatal1ty/amqpipe/master/LICENSE)
+[![Build Status](https://travis-ci.org/Fatal1ty/amqpipe.svg?branch=master)](https://travis-ci.org/Fatal1ty/amqpipe)
+[![PyPI](https://img.shields.io/pypi/v/amqpipe.svg)](https://pypi.python.org/pypi/amqpipe)
+[![PyPI](https://img.shields.io/pypi/pyversions/amqpipe.svg)](https://pypi.python.org/pypi/amqpipe)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Fatal1ty/amqpipe/master/LICENSE)
 
 Twisted based pipeline framework for AMQP. It allow you to create fast asynchronous services which follow ideology:
 * get message from queue

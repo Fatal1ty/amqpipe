@@ -1,17 +1,17 @@
 AMQPipe
 =======
 
-.. image:: https://img.shields.io/pypi/dm/amqpipe.svg?maxAge=2592000
-   :target: https://pypi.python.org/pypi/amqpipe
+.. image:: https://travis-ci.org/Fatal1ty/amqpipe.svg?branch=master
+    :target: https://travis-ci.org/Fatal1ty/amqpipe
 
-.. image:: https://img.shields.io/pypi/v/amqpipe.svg?maxAge=2592000
-   :target: https://pypi.python.org/pypi/amqpipe
+.. image:: https://img.shields.io/pypi/v/amqpipe.svg
+    :target: https://pypi.python.org/pypi/amqpipe
 
-.. image:: https://img.shields.io/pypi/pyversions/amqpipe.svg?maxAge=2592000
-   :target: https://pypi.python.org/pypi/amqpipe
+.. image:: https://img.shields.io/pypi/pyversions/amqpipe.svg
+    :target: https://pypi.python.org/pypi/amqpipe/
 
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg?maxAge=2592000
-   :target: https://raw.githubusercontent.com/Fatal1ty/amqpipe/master/LICENSE
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://raw.githubusercontent.com/Fatal1ty/amqpipe/master/LICENSE
 
 Twisted based pipeline framework for AMQP. It allow you to create fast
 asynchronous services which follow ideology:
