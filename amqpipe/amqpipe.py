@@ -45,7 +45,7 @@ class AMQPipe(object):
 
     @defer.inlineCallbacks
     def consume(self, channel, exchange, routing_key, queue):
-        yield channel.exchange_declare(exchange=exchange, type=self.args.rq_in_exchange_type, durable=True)
+        yield channel.exchange_declare(exchange=exchange, exchange_type=self.args.rq_in_exchange_type, durable=True)
         yield channel.queue_declare(queue=queue, durable=True, auto_delete=False, exclusive=False)
         yield channel.queue_bind(exchange=exchange, queue=queue, routing_key=routing_key)
         yield channel.basic_qos(prefetch_count=self.args.rq_in_qos)
@@ -131,7 +131,7 @@ class AMQPipe(object):
             try:
                 yield self.out_channel.exchange_declare(
                     exchange=self.args.rq_out_exchange,
-                    type=self.args.rq_out_exchange_type, durable=True
+                    exchange_type=self.args.rq_out_exchange_type, durable=True
                 )
             except Exception as e:
                 logger.error("Couldn't declare exchange to publish (%s)", e)
