@@ -65,13 +65,24 @@ class AMQPipe(object):
                     self.args.rq_in_password
                 )
             except Exception as e:
-                logger.error("Couldn't connect to RabbitMQ server to consume (%s)", e)
+                logger.error(
+                    "Couldn't connect to RabbitMQ server to consume (%s)", e
+                )
                 yield asleep(1)
                 continue
             try:
                 channel = yield connection.channel()
             except Exception as e:
-                logger.error("Couldn't open channel to RabbitMQ server to consume (%s)", e)
+                logger.error(
+                    "Couldn't open channel to RabbitMQ server "
+                    "to consume (%s)", e
+                )
+                try:
+                    connection.close()
+                except Exception as e:
+                    logger.error(
+                        "Couldn't close connection for consume (%s)", e
+                    )
                 yield asleep(1)
                 continue
             try:
@@ -84,9 +95,11 @@ class AMQPipe(object):
             except Exception as e:
                 logger.error("Couldn't consume from queue (%s)", e)
                 try:
-                    channel.close()
-                except:
-                    pass
+                    connection.close()
+                except Exception as e:
+                    logger.error(
+                        "Couldn't close connection for consume (%s)", e
+                    )
                 yield asleep(1)
                 continue
 
@@ -101,8 +114,13 @@ class AMQPipe(object):
                         body, properties, channel, method.delivery_tag
                     )
                 except Exception as e:
-                    logger.error("Disconnect occurred in message consumer (%s)", e)
-                    channel.close()
+                    logger.error(
+                        "Disconnect occurred in message consumer (%s)", e
+                    )
+                    try:
+                        connection.close()
+                    except:
+                        pass
                     break
             yield asleep(5)
 
@@ -119,13 +137,24 @@ class AMQPipe(object):
                     self.args.rq_out_password
                 )
             except Exception as e:
-                logger.error("Couldn't connect to RabbitMQ server to publish (%s)", e)
+                logger.error(
+                    "Couldn't connect to RabbitMQ server to publish (%s)", e
+                )
                 yield asleep(1)
                 continue
             try:
                 self.out_channel = yield connection.channel()
             except Exception as e:
-                logger.error("Couldn't open channel to RabbitMQ server to publish (%s)", e)
+                logger.error(
+                    "Couldn't open channel to RabbitMQ server "
+                    "to publish (%s)", e
+                )
+                try:
+                    connection.close()
+                except Exception as e:
+                    logger.error(
+                        "Couldn't close connection for publish (%s)", e
+                    )
                 yield asleep(1)
                 continue
             try:
@@ -136,9 +165,11 @@ class AMQPipe(object):
             except Exception as e:
                 logger.error("Couldn't declare exchange to publish (%s)", e)
                 try:
-                    self.out_channel.close()
-                except:
-                    pass
+                    connection.close()
+                except Exception as e:
+                    logger.error(
+                        "Couldn't close connection for publish (%s)", e
+                    )
                 yield asleep(1)
                 continue
 
@@ -149,7 +180,9 @@ class AMQPipe(object):
             logger.info("Ready to publish messages!")
 
             reason = yield disconnect
-            logger.error("Disconnect occurred in message publisher (%s)", reason)
+            logger.error(
+                "Disconnect occurred in message publisher (%s)", reason
+            )
             yield asleep(5)
             self.wait_publisher = defer.Deferred()
 

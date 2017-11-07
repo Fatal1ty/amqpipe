@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='amqpipe',
-    version='1.0',
+    version='1.1',
     description='Twisted based pipeline framework for AMQP',
     long_description=open('README.rst').read(),
     platforms='all',
