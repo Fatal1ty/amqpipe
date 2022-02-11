@@ -30,7 +30,7 @@ setup(
     url='https://github.com/Fatal1ty/amqpipe',
     packages=['amqpipe'],
     install_requires=[
-        'twisted==17.9.0',
+        'twisted==22.1.0',
         'pika==0.11.0',
         'colorlog==3.1.0'
     ]
